@@ -1,3 +1,9 @@
+/**
+ * pretty-json.min.js
+ *
+ * taken from https://github.com/warfares/pretty-json and modified to be an ES6 module
+ */
+
 const Backbone = require('backbone');
 const _ = require('underscore');
 const $ = require('jquery');

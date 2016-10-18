@@ -4,7 +4,6 @@ const config = require('./config');
 const electron = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
-// const livereload = require('electron-livereload');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

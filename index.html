@@ -4,18 +4,53 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/main.css" type="text/css">
+  <link rel="stylesheet" href="css/tab.css" type="text/css">
   <title>Data Explorer</title>
+  <script>
+    function openCity(evt, cityName) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the link that opened the tab
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
 </head>
 
 <body>
-  <div id="main">
-    <div id="message-window"></div>
-    <input id="query"><br/>
-    <textarea id="data-input">
-      {"user_id":7180,"video_id":1292,"device":"Web Browser","browser":"Chrome","referrer":"http://littlstar.com/videos/8f7075ea","timestamp":"2015-08-22T00:04:17-04:00","ip_address":"190.17.53.254","region":null,"city":null,"country":"AR","latitude":-34.6033,"longitude":-58.3817,"platform":"Web","user_agent":"Chrome","device_type":"web","operating_system":"Windows"}
-    </textarea>
+  <ul class="tab">
+    <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'London')">JSON</a></li>
+    <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Paris')">Input</a></li>
+    <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Tokyo')">Data</a></li>
+  </ul>
+
+  <div id="input" class="tabcontent">
+    <textarea id="data-input"></textarea>
+  </div>
+
+  <div id="output" class="tabcontent">
     <div id="output-container"></div>
   </div>
+
+  <div id="message-window"></div>
+  <div id="main">
+    <textarea id="data-input"></textarea>
+    <div id="output-container"></div>
+  </div>
+  <div id="message-window"></div>
 </body>
 <script>
   require('./js/main');

@@ -9,62 +9,77 @@ const fs = require('fs');
 class App {
 
   constructor(document) {
-
     this.outputContainer = $('#output-container');
     this.messageWindow = $('#message-window');
     this.textArea = $('#main textarea');
     this.queryArea = $('#query');
     this.document = document;
+    this.init();
+  }
 
-    // initial update
-    this.update(this.textArea.val());
+  /**
+   * Prepare document events and message box
+   */
 
-    /**
-     * Drag / drop
-     */
+  init() {
 
-    document.ondragover = document.ondrop = (ev) => {
+    // drag-drop file
+    this.document.ondragover = document.ondrop = ev => {
       ev.preventDefault();
     };
-
-    document.body.ondrop = (ev) => {
+    this.document.body.ondrop = ev => {
       ev.preventDefault();
       let path = ev.dataTransfer.files[0].path;
-      let text = fs.readFileSync(path).toString();
-      let el = $('#main');
-      this.update(text);
+      this.input(fs.readFileSync(path).toString());
     };
 
+    // text input
     this.textArea.on('input', i => {
-      this.textArea.val(this.textArea.val().trim());
-      this.input = this.textArea.val();
-      this.update();
+      this.input(this.textArea.val().trim());
     });
+
+    // welcome message
+    this.message('Input text data, or drag a file');
   }
 
-  update(text) {
+  /**
+   * Handle input text
+   *
+   * @param {string} text
+   */
+
+  input(text) {
     try {
-      this.data = json5.parse(this.input);
-      this.clearMessage();
-      this.show();
-      this.textArea.hide();
-      this.queryArea.show();
+      this.data = json5.parse(text);
     } catch (e) {
-      this.message(e.message);
+      this.message('Not valid JSON');
+      return;
     }
+    this.displayData();
+    this.textArea.css('height', '100px');
   }
+
+  /**
+   * Display a message
+   */
 
   message(message) {
     this.messageWindow.text(message);
   }
 
-  show() {
+  /**
+   *
+   */
+
+  displayData() {
     this.outputContainer.append('<div id="output"></div>');
     this.output = $('#output');
     this.view = new prettyJSON.view.Node({
       data: this.data,
       el: this.output
-    })
+    });
+    this.view.expandAll();
+    $('.null').text('NULL')
   }
 
   clearOutput() {
