@@ -1,5 +1,7 @@
 body {
-  font-family: helvetica
+  font-family: courier-new;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 #message-window {
@@ -13,10 +15,9 @@ body {
 }
 
 #data-input {
-  margin-top: 20px;
-  width:98%;
-  height: 200px;
-  font-size: 20px;
+  width:1000px;
+  height: 1000px;;
+  border: none;
 }
 
 #output {
@@ -29,7 +30,7 @@ li {
 }
 
 .string {
-  color: #92F23C;
+  color: #66CC99;
 }
 
 .number {
@@ -38,4 +39,13 @@ li {
 
 .null {
   color: #FF7340;
+}
+
+.boolean {
+  color: #cc00cc;
+}
+
+.node-bracket:hover {
+  color: red;
+  cursor: pointer;
 }

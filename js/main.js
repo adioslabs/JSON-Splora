@@ -13,6 +13,7 @@ class App {
     this.messageWindow = $('#message-window');
     this.textArea = $('#main textarea');
     this.queryArea = $('#query');
+    this.input = $('#input');
     this.document = document;
     this.init();
   }
@@ -23,19 +24,21 @@ class App {
 
   init() {
 
-    // drag-drop file
+    // drag over event file
     this.document.ondragover = document.ondrop = ev => {
       ev.preventDefault();
     };
+
+    // drop event
     this.document.body.ondrop = ev => {
       ev.preventDefault();
       let path = ev.dataTransfer.files[0].path;
-      this.input(fs.readFileSync(path).toString());
+      this.textInput(fs.readFileSync(path).toString());
     };
 
     // text input
     this.textArea.on('input', i => {
-      this.input(this.textArea.val().trim());
+      this.textInput(this.textArea.val().trim());
     });
 
     // welcome message
@@ -48,7 +51,7 @@ class App {
    * @param {string} text
    */
 
-  input(text) {
+  textInput(text) {
     try {
       this.data = json5.parse(text);
     } catch (e) {
@@ -73,6 +76,7 @@ class App {
 
   displayData() {
     this.outputContainer.append('<div id="output"></div>');
+    this.input.remove();
     this.output = $('#output');
     this.view = new prettyJSON.view.Node({
       data: this.data,
