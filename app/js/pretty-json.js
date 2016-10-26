@@ -16,10 +16,10 @@ const PrettyJSON = {
   tpl: {}
 };
 
-// const closeKey = '<strong><span class="open-bracket">&#62;</span></strong>';
 const closeKey = '<span class="open-bracket">...</span>';
+const nullValue = 'null';
 
-const node = `
+const NodeHTML = `
 <span class="node-container">
   <span class="node-top node-bracket" />
     <span class="node-content-wrapper">
@@ -28,10 +28,9 @@ const node = `
     <span class="node-down node-bracket" /></span>
 `;
 
-const leaf = `
+const LeafHTML = `
 <span class="leaf-container">
-  <span class="<%= type %>"><%-data%></span>
-  <span><%= coma %></span>
+  <span class="<%= type %>"><%-data%></span><span><%=coma %></span>
 </span>
 `;
 
@@ -81,7 +80,7 @@ const NodeView = Backbone.View.extend({
     };
   },
   render: function() {
-    this.tpl = _.template(node);
+    this.tpl = _.template(NodeHTML);
     $(this.el).html(this.tpl);
     this.elements();
     var b = this.getBrackets();
@@ -240,12 +239,12 @@ const LeafView = Backbone.View.extend({
       state.data = dateFormat(this.data, this.dateFormat);
     }
     if (state.type == 'null') {
-      state.data = 'null';
+      state.data = nullValue;
     }
     if (state.type == 'string') {
       state.data = (state.data == '') ? '""' : '"' + state.data + '"';
     }
-    this.tpl = _.template(leaf);
+    this.tpl = _.template(LeafHTML);
     $(this.el).html(this.tpl(state));
     return this;
   },

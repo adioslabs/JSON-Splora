@@ -58,7 +58,6 @@ class App {
       el: this.output
     });
     this.view.expandAll();
-    $('.null').text('NULL')
   }
 
   /**
