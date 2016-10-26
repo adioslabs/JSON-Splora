@@ -9,7 +9,9 @@ class App {
 
   constructor(document) {
     this.outputContainer = $('#output-container');
-    this.textInput = $('#text-input');
+    this.messageWindow = $('#message-window');
+    this.objectInput = $('#object-input');
+    this.dataInput = $('#data-input');
     this.output = $('#output');
 
     // drag over event file
@@ -21,12 +23,18 @@ class App {
     document.body.ondrop = e => {
       e.preventDefault();
       let path = e.dataTransfer.files[0].path;
-      this.parseTextInput(fs.readFileSync(path).toString());
+      this.show(fs.readFileSync(path).toString());
     };
 
     // text input
-    this.textInput.on('input', _ => {
-      this.parseTextInput(this.textInput.val().trim());
+    this.dataInput.on('input', _ => {
+      this.show(this.dataInput.val().trim());
+    });
+
+    // mess with data object
+    this.objectInput.on('input', _ => {
+      let input = this.objectInput.val();
+      console.log(input);
     });
   }
 
@@ -34,23 +42,14 @@ class App {
    * Handle input text
    */
 
-  parseTextInput(text) {
+  show(text) {
     try {
       this.data = json5.parse(text);
-      this.message('');
     } catch (e) {
       this.output.remove();
       this.message('Inalid JSON');
       return;
     }
-    this.displayData();
-  }
-
-  /**
-   * Display pretty JSON
-   */
-
-  displayData() {
     this.outputContainer.append('<div id="output"></div>')
     this.output = $('#output');
     this.view = new prettyJSON({
@@ -58,6 +57,12 @@ class App {
       el: this.output
     });
     this.view.expandAll();
+    this.toggleDisplay();
+  }
+
+  toggleDisplay() {
+    this.dataInput.hide();
+    this.objectInput.show();
   }
 
   /**
@@ -65,7 +70,7 @@ class App {
    */
 
   message(text) {
-    $('#message-window').text(text);
+    this.messageWindow.text(text);
   }
 }
 

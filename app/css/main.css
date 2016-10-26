@@ -21,7 +21,15 @@ body {
   color: black;
 }
 
-#text-input {
+#object-input {
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100px;
+  bottom: 0px;
+}
+
+#data-input {
   position: absolute;
   width: 100%;
   height: 100px;
