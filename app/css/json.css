@@ -1,0 +1,28 @@
+
+li {
+  list-style: none;
+}
+
+.open-bracket:hover {
+  color: red;
+}
+
+.string {
+  color: #66CC99;
+}
+
+.number {
+  color: #3E94E1;
+}
+
+.null {
+  color: #FF7340;
+}
+
+.boolean {
+  color: #cc00cc;
+}
+
+.node-bracket:hover {
+  cursor: pointer;
+}

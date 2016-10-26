@@ -3,19 +3,22 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="css/main.css" type="text/css">
+  <link rel="stylesheet" href="app/css/main.css" type="text/css">
+  <link rel="stylesheet" href="app/css/json.css" type="text/css">
   <title>Data Explorer</title>
 </head>
 
 <body>
-  <div id="input" class="tabcontent">
-    <textarea id="data-input"></textarea>
+  <div id="app-container">
+    <div id="message-window"></div>
+    <div id="output-container">
+      <div id="output"></div>
+    </div>
+    <textarea id="text-input"></textarea>
   </div>
-  <div id="output-container"></div>
-  <div id="message-window"></div>
+  <script>
+    require('./app/js/main');
+  </script>
 </body>
-<script>
-  require('./js/main');
-</script>
 
 </html>
