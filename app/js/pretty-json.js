@@ -1,43 +1,41 @@
+'use strict'
+
 /**
  * pretty-json.js
  *
  * taken from https://github.com/warfares/pretty-json and modified to be an ES6 module
  */
 
+const EventEmitter = require('events').EventEmitter;
 const Backbone = require('backbone');
 const _ = require('underscore');
 const $ = require('jquery');
-const closeKey = '<span class="open-bracket">&#62;</span>';
 
 const PrettyJSON = {
-    view: {},
-    tpl: {}
+  view: {},
+  tpl: {}
 };
 
-PrettyJSON.util = {
-    isObject: function(v) {
-        return Object.prototype.toString.call(v) === '[object Object]';
-    },
-    pad: function(str, length) {
-        str = String(str);
-        while (str.length < length) str = '0' + str;
-        return str;
-    },
-    dateFormat: function(date, f) {
-        f = f.replace('YYYY', date.getFullYear());
-        f = f.replace('YY', String(date.getFullYear()).slice(-2));
-        f = f.replace('MM', PrettyJSON.util.pad(date.getMonth() + 1, 2));
-        f = f.replace('DD', PrettyJSON.util.pad(date.getDate(), 2));
-        f = f.replace('HH24', PrettyJSON.util.pad(date.getHours(), 2));
-        f = f.replace('HH', PrettyJSON.util.pad((date.getHours() % 12), 2));
-        f = f.replace('MI', PrettyJSON.util.pad(date.getMinutes(), 2));
-        f = f.replace('SS', PrettyJSON.util.pad(date.getSeconds(), 2));
-        return f;
-    }
-}
-PrettyJSON.tpl.Node = '' + '<span class="node-container">' + '<span class="node-top node-bracket" />' + '<span class="node-content-wrapper">' + '<ul class="node-body" />' + '</span>' + '<span class="node-down node-bracket" />' + '</span>';
-PrettyJSON.tpl.Leaf = '' + '<span class="leaf-container">' + '<span class="<%= type %>"> <%-data%></span><span><%= coma %></span>' + '</span>';
-PrettyJSON.view.Node = Backbone.View.extend({
+// const closeKey = '<strong><span class="open-bracket">&#62;</span></strong>';
+const closeKey = '<span class="open-bracket">...</span>';
+
+const node = `
+<span class="node-container">
+  <span class="node-top node-bracket" />
+    <span class="node-content-wrapper">
+      <ul class="node-body" />
+    </span>
+    <span class="node-down node-bracket" /></span>
+`;
+
+const leaf = `
+<span class="leaf-container">
+  <span class="<%= type %>"><%-data%></span>
+  <span><%= coma %></span>
+</span>
+`;
+
+const NodeView = Backbone.View.extend({
     tagName: 'span',
     data: null,
     level: 1,
@@ -83,7 +81,7 @@ PrettyJSON.view.Node = Backbone.View.extend({
         };
     },
     render: function() {
-        this.tpl = _.template(PrettyJSON.tpl.Node);
+        this.tpl = _.template(node);
         $(this.el).html(this.tpl);
         this.elements();
         var b = this.getBrackets();
@@ -107,7 +105,7 @@ PrettyJSON.view.Node = Backbone.View.extend({
                 dateFormat: this.dateFormat,
                 isLast: isLast
             };
-            var child = (PrettyJSON.util.isObject(val) || _.isArray(val)) ? new PrettyJSON.view.Node(opt) : new PrettyJSON.view.Leaf(opt);
+            var child = (isObject(val) || _.isArray(val)) ? new NodeView(opt) : new LeafView(opt);
             child.on('mouseover', function(e, path) {
                 this.trigger("mouseover", e, path);
             }, this);
@@ -176,7 +174,7 @@ PrettyJSON.view.Node = Backbone.View.extend({
     },
     expandAll: function() {
         _.each(this.childs, function(child) {
-            if (child instanceof PrettyJSON.view.Node) {
+            if (child instanceof NodeView) {
                 child.show();
                 child.expandAll();
             }
@@ -185,7 +183,7 @@ PrettyJSON.view.Node = Backbone.View.extend({
     },
     collapseAll: function() {
         _.each(this.childs, function(child) {
-            if (child instanceof PrettyJSON.view.Node) {
+            if (child instanceof NodeView) {
                 child.hide();
                 child.collapseAll();
             }
@@ -194,7 +192,8 @@ PrettyJSON.view.Node = Backbone.View.extend({
             this.hide();
     }
 });
-PrettyJSON.view.Leaf = Backbone.View.extend({
+
+const LeafView = Backbone.View.extend({
     tagName: 'span',
     data: null,
     level: 0,
@@ -238,7 +237,7 @@ PrettyJSON.view.Leaf = Backbone.View.extend({
     render: function() {
         var state = this.getState();
         if (state.type == 'date' && this.dateFormat) {
-            state.data = PrettyJSON.util.dateFormat(this.data, this.dateFormat);
+            state.data = dateFormat(this.data, this.dateFormat);
         }
         if (state.type == 'null') {
             state.data = 'null';
@@ -246,7 +245,7 @@ PrettyJSON.view.Leaf = Backbone.View.extend({
         if (state.type == 'string') {
             state.data = (state.data == '') ? '""' : '"' + state.data + '"';
         }
-        this.tpl = _.template(PrettyJSON.tpl.Leaf);
+        this.tpl = _.template(leaf);
         $(this.el).html(this.tpl(state));
         return this;
     },
@@ -261,4 +260,26 @@ PrettyJSON.view.Leaf = Backbone.View.extend({
     }
 });
 
-module.exports = PrettyJSON;
+function dateFormat(date, f) {
+  f = f.replace('YYYY', date.getFullYear());
+  f = f.replace('YY', String(date.getFullYear()).slice(-2));
+  f = f.replace('MM', pad(date.getMonth() + 1, 2));
+  f = f.replace('DD', pad(date.getDate(), 2));
+  f = f.replace('HH24', pad(date.getHours(), 2));
+  f = f.replace('HH', pad((date.getHours() % 12), 2));
+  f = f.replace('MI', pad(date.getMinutes(), 2));
+  f = f.replace('SS', pad(date.getSeconds(), 2));
+  return f;
+}
+
+function isObject(v) {
+  return Object.prototype.toString.call(v) === '[object Object]';
+}
+
+function pad(str, length) {
+  str = String(str);
+  while (str.length < length) str = '0' + str;
+  return str;
+}
+
+module.exports = NodeView;

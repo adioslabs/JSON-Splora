@@ -53,7 +53,7 @@ class App {
   displayData() {
     this.outputContainer.append('<div id="output"></div>')
     this.output = $('#output');
-    this.view = new prettyJSON.view.Node({
+    this.view = new prettyJSON({
       data: this.data,
       el: this.output
     });
