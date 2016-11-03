@@ -1,8 +1,17 @@
 'use strict'
 
-const config = require('./config');
+// Dependencies
 const electron = require('electron')
+const config = require('./config')
 const app = electron.app
+
+require('electron-context-menu')({
+  prepend: params => [{
+    label: 'Rainbow'
+  }]
+})
+
+// Create window
 const BrowserWindow = electron.BrowserWindow
 
 // Keep a global reference of the window object, if you don't, the window will
