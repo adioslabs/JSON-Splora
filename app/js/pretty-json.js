@@ -8,6 +8,7 @@
 
 const EventEmitter = require('events').EventEmitter;
 const Backbone = require('backbone');
+var uuid = require('node-uuid');
 const _ = require('underscore');
 const $ = require('jquery');
 
@@ -16,16 +17,17 @@ const PrettyJSON = {
   tpl: {}
 };
 
-const closeKey = '<span class="open-bracket">...</span>';
+const closeKey = '<span class="open-bracket">></span>';
 const nullValue = 'null';
 
-const NodeHTML = `
+
+const getNodeHTML = _ => `
 <span class="node-container">
-  <span class="node-top node-bracket" />
+  <span class="node-top node-bracket" data-uuid="${uuid.v4()}" />
     <span class="node-content-wrapper">
       <ul class="node-body" />
     </span>
-    <span class="node-down node-bracket" /></span>
+    <span class="node-down node-bracket" data-uuid="${uuid.v4()}" /></span>
 `;
 
 const LeafHTML = `
@@ -80,7 +82,7 @@ const NodeView = Backbone.View.extend({
     };
   },
   render: function() {
-    this.tpl = _.template(NodeHTML);
+    this.tpl = _.template(getNodeHTML());
     $(this.el).html(this.tpl);
     this.elements();
     var b = this.getBrackets();
