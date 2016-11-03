@@ -4,7 +4,7 @@ li {
 }
 
 .open-bracket:hover {
-  font-size: 22px;
+  color: red;
 }
 
 .string {

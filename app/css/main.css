@@ -5,6 +5,10 @@ body {
   font-size: 20px;
 }
 
+ul.node-body {
+  margin: 0em;
+}
+
 #app-container {
   position: absolute;
   width: 100%;

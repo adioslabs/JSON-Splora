@@ -62,7 +62,7 @@ class App {
 
   toggleDisplay() {
     this.dataInput.hide();
-    this.objectInput.show();
+    // this.objectInput.show();
   }
 
   /**
