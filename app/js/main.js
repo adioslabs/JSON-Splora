@@ -2,8 +2,9 @@
 
 const prettyJSON = require('./pretty-json')
 const json5 = require('json5')
-const $ = require('jquery')
+const jq = require('node-jq')
 const fs = require('fs')
+const $ = require('jquery')
 
 class App {
 
@@ -33,8 +34,15 @@ class App {
 
     // mess with data object
     this.objectInput.on('input', _ => {
-      let input = this.objectInput.val()
-      console.log(input)
+      let filter = this.objectInput.val()
+      jq.run(filter, this.data, {
+        input: 'json',
+        output: 'json'
+      }).then(output => {
+        console.log('output', output)
+      }).catch(e => {
+        console.log('error', e)
+      });
     })
   }
 
@@ -56,26 +64,22 @@ class App {
       data: this.data,
       el: this.output
     })
+
     this.view.expandAll()
-    this.view.on('collapse', _ => {
-      // console.log('collapse')
-    })
-    this.view.on('mouseover', _ => {
-      // console.log('mouseover')
-    })
-    this.view.on('mouseout', _ => {
-      // console.log('mouseout')
-    })
+
     $('.node-bracket').each(function() {
       $(this).hover(function() {
         let uuid = $(this).data('uuid')
         $(`[data-uuid="${uuid}"]`).addClass('bracket-hover')
       })
     })
+
     $('.node-bracket').mouseleave(function() {
       $('.node-bracket').removeClass('bracket-hover')
     })
+
     this.dataInput.hide()
+    this.objectInput.show()
   }
 
   collapseAll() {

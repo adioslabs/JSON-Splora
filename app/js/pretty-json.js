@@ -17,7 +17,7 @@ const PrettyJSON = {
   tpl: {}
 };
 
-const closeKey = '<span class="open-bracket">></span>'
+const closeKey = '<span class="open-bracket">...</span>'
 const comma = '<span class="comma">,</span>'
 const nullValue = 'null'
 
@@ -155,13 +155,13 @@ const NodeView = Backbone.View.extend({
     var v = {
       top: '{',
       bottom: '}',
-      close: '{ ' + closeKey + ' }'
+      close: '{' + closeKey + '}'
     };
     if (this.type == 'array') {
       v = {
         top: '[',
         bottom: ']',
-        close: '[ ' + closeKey + ' ]'
+        close: '[' + closeKey + ']'
       };
     };
     v.bottom = (this.isLast) ? v.bottom : v.bottom + comma;
