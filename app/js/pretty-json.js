@@ -17,18 +17,21 @@ const PrettyJSON = {
   tpl: {}
 };
 
-const closeKey = '<span class="open-bracket">></span>';
-const nullValue = 'null';
+const closeKey = '<span class="open-bracket">></span>'
+const comma = '<span class="comma">,</span>'
+const nullValue = 'null'
 
-
-const getNodeHTML = _ => `
+const getNodeHTML = _ => {
+  let id = uuid.v4();
+  return `
 <span class="node-container">
-  <span class="node-top node-bracket" data-uuid="${uuid.v4()}" />
+  <span class="node-top node-bracket" data-uuid="${id}" />
     <span class="node-content-wrapper">
       <ul class="node-body" />
     </span>
-    <span class="node-down node-bracket" data-uuid="${uuid.v4()}" /></span>
+    <span class="node-down node-bracket" data-uuid="${id}" /></span>
 `;
+}
 
 const LeafHTML = `
 <span class="leaf-container">
@@ -161,8 +164,8 @@ const NodeView = Backbone.View.extend({
         close: '[ ' + closeKey + ' ]'
       };
     };
-    v.bottom = (this.isLast) ? v.bottom : v.bottom + ',';
-    v.close = (this.isLast) ? v.close : v.close + ',';
+    v.bottom = (this.isLast) ? v.bottom : v.bottom + comma;
+    v.close = (this.isLast) ? v.close : v.close + comma;
     return v;
   },
   mouseover: function(e) {

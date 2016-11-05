@@ -7,6 +7,14 @@ li {
   color: red;
 }
 
+.comma {
+  color: black;
+}
+
+.bracket-hover {
+  color: red;
+}
+
 .string {
   color: #6AE368;
 }

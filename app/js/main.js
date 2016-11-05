@@ -1,41 +1,41 @@
 'use strict'
 
-const prettyJSON = require('./pretty-json');
-const json5 = require('json5');
-const $ = require('jquery');
-const fs = require('fs');
+const prettyJSON = require('./pretty-json')
+const json5 = require('json5')
+const $ = require('jquery')
+const fs = require('fs')
 
 class App {
 
   constructor(document) {
-    this.outputContainer = $('#output-container');
-    this.messageWindow = $('#message-window');
-    this.objectInput = $('#object-input');
-    this.dataInput = $('#data-input');
-    this.output = $('#output');
+    this.outputContainer = $('#output-container')
+    this.messageWindow = $('#message-window')
+    this.objectInput = $('#object-input')
+    this.dataInput = $('#data-input')
+    this.output = $('#output')
 
     // drag over event file
     document.ondragover = document.ondrop = e => {
-      e.preventDefault();
-    };
+      e.preventDefault()
+    }
 
     // drop event
     document.body.ondrop = e => {
-      e.preventDefault();
-      let path = e.dataTransfer.files[0].path;
-      this.show(fs.readFileSync(path).toString());
-    };
+      e.preventDefault()
+      let path = e.dataTransfer.files[0].path
+      this.show(fs.readFileSync(path).toString())
+    }
 
     // text input
     this.dataInput.on('input', _ => {
-      this.show(this.dataInput.val().trim());
-    });
+      this.show(this.dataInput.val().trim())
+    })
 
     // mess with data object
     this.objectInput.on('input', _ => {
-      let input = this.objectInput.val();
-      console.log(input);
-    });
+      let input = this.objectInput.val()
+      console.log(input)
+    })
   }
 
   /**
@@ -44,25 +44,42 @@ class App {
 
   show(text) {
     try {
-      this.data = json5.parse(text);
+      this.data = json5.parse(text)
     } catch (e) {
-      this.output.remove();
-      this.message('Inalid JSON');
-      return;
+      this.output.remove()
+      this.message('Inalid JSON')
+      return
     }
     this.outputContainer.append('<div id="output"></div>')
-    this.output = $('#output');
+    this.output = $('#output')
     this.view = new prettyJSON({
       data: this.data,
       el: this.output
-    });
-    this.view.expandAll();
-    this.toggleDisplay();
+    })
+    this.view.expandAll()
+    this.view.on('collapse', _ => {
+      // console.log('collapse')
+    })
+    this.view.on('mouseover', _ => {
+      // console.log('mouseover')
+    })
+    this.view.on('mouseout', _ => {
+      // console.log('mouseout')
+    })
+    $('.node-bracket').each(function() {
+      $(this).hover(function() {
+        let uuid = $(this).data('uuid')
+        $(`[data-uuid="${uuid}"]`).addClass('bracket-hover')
+      })
+    })
+    $('.node-bracket').mouseleave(function() {
+      $('.node-bracket').removeClass('bracket-hover')
+    })
+    this.dataInput.hide()
   }
 
-  toggleDisplay() {
-    this.dataInput.hide();
-    // this.objectInput.show();
+  collapseAll() {
+    this.view.collapseAll()
   }
 
   /**
@@ -70,14 +87,14 @@ class App {
    */
 
   message(text) {
-    this.messageWindow.text(text);
+    this.messageWindow.text(text)
   }
 }
 
-const app = new App(document);
+const app = new App(document)
 
 /**
  * Export app
  */
 
-module.exports = app;
+module.exports = app
