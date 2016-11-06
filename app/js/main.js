@@ -78,6 +78,12 @@ class App {
       $('.node-bracket').removeClass('bracket-hover')
     })
 
+    $('.node-bracket').click(function(e) {
+      if (!$(e.target).hasClass('node-bracket')) {
+        $('.node-bracket').removeClass('bracket-hover')
+      }
+    })
+
     this.dataInput.hide()
     this.objectInput.show()
   }
