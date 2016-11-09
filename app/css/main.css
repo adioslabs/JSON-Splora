@@ -16,10 +16,15 @@ ul.node-body {
 
 .output-containers {}
 
-.json-output-container {
-  position: relative;
-  float: left;
+.left {
+  position: absolute;
+  border-right: 1px solid gray;
   width: 45%;
+  height: 100%;
+}
+
+.json-output-container {
+  width: 100%;
   height: 100%;
 }
 
@@ -37,14 +42,18 @@ ul.node-body {
   color: black;
 }
 
-.jq-input {
+.bottom-bar {
   position: absolute;
-  display: none;
+  bottom: 15px;
+  width: 100%;
+  left: 10px;
+}
+
+.jq-input {
   width: 50%;
   left: 10px;
   height: 20px;
   font-size: 20px;
-  bottom: 16px;
 }
 
 .checkmark-container {

@@ -13,11 +13,13 @@ class App {
     this.jqOutput = $('.output-containers .jq-output-container')
     this.messageWindow = $('.message-window')
     this.jqInput = $('.jq-input')
+    this.bottomBar = $('.bottom-bar')
     this.dataInput = $('.data-input')
     this.checkmark = $('.checkmark-container')
     this.output = $('.output')
 
     this.checkmark.hide()
+    this.bottomBar.hide()
 
     // drag over event file
     document.ondragover = document.ondrop = e => {
@@ -44,16 +46,22 @@ class App {
         output: 'json'
       }).then(jqData => {
         this.jqData = jqData
-        if (typeof jqData == 'object') {
+        if (jqData && typeof jqData == 'object') {
           this.jqView = new prettyJSON({
             data: jqData,
             el: this.jqOutput
           })
-          this.jqOutput.show()
+          this.bottomBar.show()
           this.checkmark.show()
           this.jqView.expandAll()
         } else {
-          $('.jq-output-container').text(String(jqData))
+          if (jqData === null) {
+            this.jqOutput.text('null')
+          } else {
+            this.jqOutput.text(String(jqData))
+          }
+          this.jqOutput.show()
+          this.checkmark.show()
         }
       }).catch(e => {
         this.checkmark.hide()
@@ -102,7 +110,7 @@ class App {
     })
 
     this.dataInput.hide()
-    this.jqInput.show()
+    this.bottomBar.show()
   }
 
   collapseAll() {
