@@ -2,7 +2,7 @@
 body {
   font-family: monaco;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 15px;
 }
 
 ul.node-body {
@@ -34,10 +34,10 @@ ul.node-body {
   bottom: 0px;
 }
 
-#data-input {
+.data-input {
   position: absolute;
-  width: 100%;
-  height: 100px;
+  width: 50%;
+  height: 100%;
   bottom: 0px;
 }
 

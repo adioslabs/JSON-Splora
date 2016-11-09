@@ -12,7 +12,7 @@ class App {
     this.outputContainer = $('#output-container')
     this.messageWindow = $('#message-window')
     this.objectInput = $('#object-input')
-    this.dataInput = $('#data-input')
+    this.dataInput = $('.data-input')
     this.output = $('#output')
 
     // drag over event file
@@ -64,6 +64,7 @@ class App {
       data: this.data,
       el: this.output
     })
+    this.dataInput.hide();
 
     this.view.expandAll()
 
