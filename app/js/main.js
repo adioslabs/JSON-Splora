@@ -55,7 +55,7 @@ class App {
       this.data = json5.parse(text)
     } catch (e) {
       this.output.remove()
-      this.message('Inalid JSON')
+      this.invalid();
       return
     }
     this.outputContainer.append('<div id="output"></div>')
@@ -93,11 +93,17 @@ class App {
     this.view.collapseAll()
   }
 
+  invalid() {
+    this.message('invalid input')
+    this.dataInput.addClass('invalid')
+  }
+
   /**
    * Display a message
    */
 
   message(text) {
+    console.log(text)
     this.messageWindow.text(text)
   }
 }
