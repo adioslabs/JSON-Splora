@@ -9,11 +9,15 @@ const $ = require('jquery')
 class App {
 
   constructor(document) {
-    this.outputContainer = $('#output-container')
-    this.messageWindow = $('#message-window')
-    this.objectInput = $('#object-input')
+    this.outputContainer = $('.output-containers .json-output-container')
+    this.jqOutput = $('.output-containers .jq-output-container')
+    this.messageWindow = $('.message-window')
+    this.objectInput = $('.object-input')
     this.dataInput = $('.data-input')
-    this.output = $('#output')
+    this.checkmark = $('.checkmark')
+    this.output = $('.output')
+
+    this.checkmark.hide()
 
     // drag over event file
     document.ondragover = document.ondrop = e => {
@@ -24,12 +28,12 @@ class App {
     document.body.ondrop = e => {
       e.preventDefault()
       let path = e.dataTransfer.files[0].path
-      this.show(fs.readFileSync(path).toString())
+      this.jsonInput(fs.readFileSync(path).toString())
     }
 
     // text input
     this.dataInput.on('input', _ => {
-      this.show(this.dataInput.val().trim())
+      this.jsonInput(this.dataInput.val().trim())
     })
 
     // mess with data object
@@ -38,8 +42,17 @@ class App {
       jq.run(filter, this.data, {
         input: 'json',
         output: 'json'
-      }).then(output => {
-        console.log('output', output)
+      }).then(jqData => {
+        this.jqData = jqData
+        if (typeof jqData == 'object') {
+          this.jqView = new prettyJSON({
+            data: jqData,
+            el: this.jqOutput
+          })
+          this.checkmark.show();
+        } else {
+          $('.jq-output-container').text(jqData)
+        }
       }).catch(e => {
         console.log('error', e)
       });
@@ -50,22 +63,21 @@ class App {
    * Handle input text
    */
 
-  show(text) {
+  jsonInput(text) {
     try {
       this.data = json5.parse(text)
     } catch (e) {
-      this.output.remove()
       this.invalid();
       return
     }
-    this.outputContainer.append('<div id="output"></div>')
-    this.output = $('#output')
+    this.outputContainer.append('<div class="output"></div>')
+    this.output = $('.output')
     this.view = new prettyJSON({
       data: this.data,
       el: this.output
     })
-    this.dataInput.hide();
 
+    this.dataInput.hide()
     this.view.expandAll()
 
     $('.node-bracket').each(function() {
@@ -95,7 +107,7 @@ class App {
 
   invalid() {
     this.message('invalid input')
-    this.dataInput.addClass('invalid')
+    setTimeout(_ => this.message(''), 2000)
   }
 
   /**
@@ -103,7 +115,6 @@ class App {
    */
 
   message(text) {
-    console.log(text)
     this.messageWindow.text(text)
   }
 }

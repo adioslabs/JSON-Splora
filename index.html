@@ -9,11 +9,15 @@
 </head>
 
 <body>
-  <div id="app-container">
-    <div id="output-container"></div>
+  <div class="app-container">
+    <div class="output-containers">
+      <div class="json-output-container"></div>
+      <div class="jq-output-container"></div>
+    </div>
     <textarea class="data-input"></textarea>
-    <input id="object-input">
-    <div id="message-window"></div>
+    <div class="checkmark"></div>
+    <input class="object-input">
+    <div class="message-window"></div>
   </div>
   <script>
     require('./app/js/main');
