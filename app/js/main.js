@@ -12,9 +12,9 @@ class App {
     this.outputContainer = $('.output-containers .json-output-container')
     this.jqOutput = $('.output-containers .jq-output-container')
     this.messageWindow = $('.message-window')
-    this.objectInput = $('.object-input')
+    this.jqInput = $('.jq-input')
     this.dataInput = $('.data-input')
-    this.checkmark = $('.checkmark')
+    this.checkmark = $('.checkmark-container')
     this.output = $('.output')
 
     this.checkmark.hide()
@@ -37,8 +37,8 @@ class App {
     })
 
     // mess with data object
-    this.objectInput.on('input', _ => {
-      let filter = this.objectInput.val()
+    this.jqInput.on('input', _ => {
+      let filter = this.jqInput.val()
       jq.run(filter, this.data, {
         input: 'json',
         output: 'json'
@@ -49,11 +49,15 @@ class App {
             data: jqData,
             el: this.jqOutput
           })
-          this.checkmark.show();
+          this.jqOutput.show()
+          this.checkmark.show()
+          this.jqView.expandAll()
         } else {
-          $('.jq-output-container').text(jqData)
+          $('.jq-output-container').text(String(jqData))
         }
       }).catch(e => {
+        this.checkmark.hide()
+        this.jqOutput.hide()
         console.log('error', e)
       });
     })
@@ -98,7 +102,7 @@ class App {
     })
 
     this.dataInput.hide()
-    this.objectInput.show()
+    this.jqInput.show()
   }
 
   collapseAll() {

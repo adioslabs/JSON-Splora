@@ -19,14 +19,14 @@ ul.node-body {
 .json-output-container {
   position: relative;
   float: left;
-  width: 50%;
+  width: 45%;
   height: 100%;
 }
 
 .jq-output-container {
   position: relative;
   float: right;
-  width: 50%;
+  width: 45%;
   height: 100%;
 }
 
@@ -37,21 +37,24 @@ ul.node-body {
   color: black;
 }
 
-.object-input {
+.jq-input {
   position: absolute;
   display: none;
-  width: 90%;
-  left: 0px;
+  width: 50%;
+  left: 10px;
   height: 20px;
   font-size: 20px;
   bottom: 16px;
 }
 
-.checkmark {
+.checkmark-container {
   position: absolute;
   right: 35px;
   bottom: 20px;
   color: green;
+}
+
+.checkmark {
   display: inline-block;
 }
 
@@ -68,7 +71,7 @@ ul.node-body {
 .data-input {
   position: absolute;
   height: 50%;
-  width: 50%;
+  width: 100%;
   top: 0px;
 }
 
