@@ -14,15 +14,20 @@ ul.node-body {
   height: 100%;
 }
 
-.output-containers {}
+.output-containers {
+  min-width: 900px
+}
 
 .left {
-  position: absolute;
-  border-right: 1px solid gray;
+  float: left;
   width: 45%;
   height: 100%;
   min-width: 500px;
   min-height: 500px;
+}
+
+.right {
+
 }
 
 .json-output-container {
