@@ -56,17 +56,21 @@ class App {
     this.jqInput.on('input', _ => {
       let filter = this.jqInput.val()
       console.log('filter', filter)
+      if (!filter) {
+        this.jqView.destroy()
+        return
+      }
       jq.run(filter, this.data, {
         input: 'json',
         output: 'json'
       }).then(output => {
         console.log('output', output)
-        if (this.jqView && this.jqView.view) this.jqView.view.remove()
+        $('.jq-output').remove()
         let el = this.jqOutput.append('<div class="jq-output"></div>')
         this.jqView = new JSONView(output, el)
       }).catch(e => {
         console.log('error', e.stack || e)
-        if (this.jqView && this.jqView.view) this.jqView.view.remove()
+        this.jqView.destroy()
       });
     })
 

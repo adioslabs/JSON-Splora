@@ -12,23 +12,23 @@ const nullOutput = x => `<span class="null">null</span>`
 
 class JSONView {
 
-  constructor(data, element) {
-    this.view = element
+  constructor(data, $element) {
+    this.view = $element
     this.data = data
     if (data === null) {
-      element.html(nullOutput())
+      $element.html(nullOutput())
     } else if ('string' == typeof data) {
-      element.html(String(stringOutput(data)))
+      $element.html(String(stringOutput(data)))
     } else if ('boolean' == typeof data) {
-      element.html(String(booleanOutput(data)))
+      $element.html(String(booleanOutput(data)))
     } else if (stringableTypes.indexOf(typeof data) > -1) {
-      element.text(String(data))
+      $element.text(String(data))
     } else {
-      this.json = new prettyJSON({
+      this.view = new prettyJSON({
         data: data,
-        el: element
+        el: $element
       })
-      this.json.expandAll()
+      this.view.expandAll()
       this.setBracketEvents()
     }
   }
@@ -50,8 +50,9 @@ class JSONView {
     })
   }
 
-  toggle() {
-
+  destroy() {
+    console.log('view', this.view)
+    this.view.remove()
   }
 
 }
