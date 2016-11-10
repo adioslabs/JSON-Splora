@@ -10,20 +10,27 @@
 
 <body>
   <div class="app-container">
+
+    <!-- json / output -->
     <div class="output-containers">
       <div class="left">
         <div class="json-output-container"></div>
-        <div class="bottom-bar">
-          jq
-          <input class="jq-input">
-          <div class="message-window"></div>
-        </div>
       </div>
       <div class="right">
+        <div class="jq-output-container"></div>
       </div>
-      <div class="jq-output-container"></div>
     </div>
+
+    <!-- json input -->
     <textarea class="data-input"></textarea>
+
+    <!-- footer / input -->
+    <div class="bottom-bar">
+      jq
+      <input class="jq-input">
+      <div class="message-window"></div>
+    </div>
+
   </div>
   <script>
     require('./app/js/main');

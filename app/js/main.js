@@ -1,10 +1,24 @@
 'use strict'
 
 const prettyJSON = require('./pretty-json')
+const JSONView = require('./json-view')
 const json5 = require('json5')
 const jq = require('node-jq')
 const fs = require('fs')
 const $ = require('jquery')
+
+const json = `{
+  "name": "test data",
+  "date": "Sun Nov 06 2016 09:55:06 GMT-0500 (EST)",
+  "other": [false, null, true],
+  "people": [{
+    "name": "Wells",
+    "age": 26
+  }, {
+    "name": "Danielle",
+    "age": 24
+  }]
+}`
 
 class App {
 
@@ -19,7 +33,6 @@ class App {
     this.jqInput = $('.jq-input')
     this.output = $('.output')
 
-    this.checkmark.hide()
     this.bottomBar.hide()
 
     // drag over event file
@@ -42,34 +55,22 @@ class App {
     // mess with data object
     this.jqInput.on('input', _ => {
       let filter = this.jqInput.val()
+      console.log('filter', filter)
       jq.run(filter, this.data, {
         input: 'json',
         output: 'json'
-      }).then(jqData => {
-        this.jqData = jqData
-        if (jqData && typeof jqData == 'object') {
-          this.jqView = new prettyJSON({
-            data: jqData,
-            el: this.jqOutput
-          })
-          this.bottomBar.show()
-          this.checkmark.show()
-          this.jqView.expandAll()
-        } else {
-          if (jqData === null) {
-            this.jqOutput.text('null')
-          } else {
-            this.jqOutput.text(String(jqData))
-          }
-          this.jqOutput.show()
-          this.checkmark.show()
-        }
+      }).then(output => {
+        console.log('output', output)
+        if (this.jqView && this.jqView.view) this.jqView.view.remove()
+        let el = this.jqOutput.append('<div class="jq-output"></div>')
+        this.jqView = new JSONView(output, el)
       }).catch(e => {
-        this.checkmark.hide()
-        this.jqOutput.hide()
-        console.log('error', e)
+        console.log('error', e.stack || e)
+        if (this.jqView && this.jqView.view) this.jqView.view.remove()
       });
     })
+
+    this.jsonInput(json)
   }
 
   /**
@@ -85,32 +86,8 @@ class App {
     }
     this.outputContainer.append('<div class="output"></div>')
     this.output = $('.output')
-    this.view = new prettyJSON({
-      data: this.data,
-      el: this.output
-    })
-
-    this.dataInput.hide()
-    this.view.expandAll()
+    this.view = new JSONView(this.data, this.output)
     this.outputContainers.show()
-
-    $('.node-bracket').each(function() {
-      $(this).hover(function() {
-        let uuid = $(this).data('uuid')
-        $(`[data-uuid="${uuid}"]`).addClass('bracket-hover')
-      })
-    })
-
-    $('.node-bracket').mouseleave(function() {
-      $('.node-bracket').removeClass('bracket-hover')
-    })
-
-    $('.node-bracket').click(function(e) {
-      if (!$(e.target).hasClass('node-bracket')) {
-        $('.node-bracket').removeClass('bracket-hover')
-      }
-    })
-
     this.dataInput.hide()
     this.bottomBar.show()
   }
