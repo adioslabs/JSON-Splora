@@ -21,6 +21,8 @@ ul.node-body {
   border-right: 1px solid gray;
   width: 45%;
   height: 100%;
+  min-width: 500px;
+  min-height: 500px;
 }
 
 .json-output-container {
@@ -43,10 +45,14 @@ ul.node-body {
 }
 
 .bottom-bar {
-  position: absolute;
-  bottom: 15px;
+  position: fixed;
+  bottom: 0px;
   width: 100%;
   left: 10px;
+  border-top: 1px solid gray;
+  padding: 10px;
+  background: white;
+  padding-bottom: 15px;
 }
 
 .jq-input {
@@ -54,27 +60,6 @@ ul.node-body {
   left: 10px;
   height: 20px;
   font-size: 20px;
-}
-
-.checkmark-container {
-  position: absolute;
-  right: 35px;
-  bottom: 20px;
-  color: green;
-}
-
-.checkmark {
-  display: inline-block;
-}
-
-.checkmark:after {
-  content: '';
-  display: block;
-  width: 6px;
-  height: 15px;
-  border: solid #000;
-  border-width: 0 4px 4px 0;
-  transform: rotate(45deg);
 }
 
 .data-input {
