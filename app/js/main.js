@@ -10,12 +10,13 @@ class App {
 
   constructor(document) {
     this.outputContainer = $('.output-containers .json-output-container')
-    this.jqOutput = $('.output-containers .jq-output-container')
+    this.outputContainers = $('.output-containers')
     this.messageWindow = $('.message-window')
-    this.jqInput = $('.jq-input')
+    this.checkmark = $('.checkmark-container')
     this.bottomBar = $('.bottom-bar')
     this.dataInput = $('.data-input')
-    this.checkmark = $('.checkmark-container')
+    this.jqOutput = $('.output-containers .jq-output-container')
+    this.jqInput = $('.jq-input')
     this.output = $('.output')
 
     this.checkmark.hide()
@@ -91,6 +92,7 @@ class App {
 
     this.dataInput.hide()
     this.view.expandAll()
+    this.outputContainers.show()
 
     $('.node-bracket').each(function() {
       $(this).hover(function() {

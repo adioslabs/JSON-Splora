@@ -15,6 +15,7 @@ ul.node-body {
 }
 
 .output-containers {
+  display: none;
   min-width: 900px
 }
 
@@ -70,7 +71,7 @@ ul.node-body {
 .data-input {
   position: absolute;
   height: 50%;
-  width: 100%;
+  width: 97%;
   top: 0px;
 }
 
