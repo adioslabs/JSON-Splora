@@ -8,6 +8,7 @@
 
 const EventEmitter = require('events').EventEmitter;
 const Backbone = require('backbone');
+const uuid = require('node-uuid')
 const _ = require('underscore');
 const $ = require('jquery');
 
@@ -21,13 +22,14 @@ const comma = '<span class="comma">,</span>'
 const nullValue = 'null'
 
 const getNodeHTML = id => {
+  let bracketId = uuid.v4()
   return `
-<span class="node-container" data-output-id="${id}" data-uuid="${id}">
-  <span class="node-top node-bracket" data-uuid="${id}" />
+<span class="node-container" data-output-id="${id}">
+  <span class="node-top node-bracket" data-bracket-id="${bracketId}" />
     <span class="node-content-wrapper">
       <ul class="node-body" />
     </span>
-    <span class="node-down node-bracket" data-uuid="${id}" /></span>
+    <span class="node-down node-bracket" data-bracket-id="${bracketId}" /></span>
 `;
 }
 
@@ -52,7 +54,6 @@ const NodeView = Backbone.View.extend({
     'mouseout .node-container': 'mouseout'
   },
   initialize: function(opt) {
-    console.log('init')
     this.options = opt;
     this.data = this.options.data;
     this.uuid = this.options.uuid;
@@ -106,6 +107,7 @@ const NodeView = Backbone.View.extend({
         data: val,
         parent: this,
         path: path,
+        uuid: this.uuid,
         level: this.level + 1,
         dateFormat: this.dateFormat,
         isLast: isLast
@@ -215,8 +217,6 @@ const LeafView = Backbone.View.extend({
     this.level = this.options.level;
     this.path = this.options.path;
     this.type = this.getType();
-    this.uuid = this.options.uuid
-    console.log(this.uuid)
     this.dateFormat = this.options.dateFormat;
     this.isLast = _.isUndefined(this.options.isLast) ? this.isLast : this.options.isLast;
     this.render();
