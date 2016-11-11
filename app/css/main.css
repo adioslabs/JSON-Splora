@@ -39,6 +39,10 @@ ul.node-body {
 .jq-output-container {
 }
 
+.jq-indicator {
+  color: gray;
+}
+
 .message-window {
   position: absolute;
   bottom: 10px;

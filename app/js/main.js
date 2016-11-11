@@ -13,7 +13,8 @@ const json = `{
   "other": [false, null, true],
   "people": [{
     "name": "Wells",
-    "age": 26
+    "age": 26,
+    "activities": [null, 5, true, false]
   }, {
     "name": "Danielle",
     "age": 24
@@ -26,6 +27,7 @@ class App {
     this.outputContainer = $('.output-containers .json-output-container')
     this.outputContainers = $('.output-containers')
     this.messageWindow = $('.message-window')
+    this.jqIndicator = $('.jq-indicator')
     this.checkmark = $('.checkmark-container')
     this.bottomBar = $('.bottom-bar')
     this.dataInput = $('.data-input')
@@ -54,23 +56,22 @@ class App {
 
     // mess with data object
     this.jqInput.on('input', _ => {
-      let filter = this.jqInput.val()
-      console.log('filter', filter)
-      if (!filter) {
+      let filter = this.jqInput.val().trim()
+      if (!filter || filter == '') {
         this.jqView.destroy()
+        this.jqIndicator.css('color', 'gray')
         return
       }
       jq.run(filter, this.data, {
         input: 'json',
         output: 'json'
       }).then(output => {
-        console.log('output', output)
-        $('.jq-output').remove()
-        let el = this.jqOutput.append('<div class="jq-output"></div>')
-        this.jqView = new JSONView(output, el)
+        this.jqView = new JSONView(output, this.jqOutput)
+        this.jqIndicator.css('color', 'green')
       }).catch(e => {
         console.log('error', e.stack || e)
         this.jqView.destroy()
+        this.jqIndicator.css('color', 'gray')
       });
     })
 
@@ -94,10 +95,6 @@ class App {
     this.outputContainers.show()
     this.dataInput.hide()
     this.bottomBar.show()
-  }
-
-  collapseAll() {
-    this.view.collapseAll()
   }
 
   invalid() {
