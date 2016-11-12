@@ -1,6 +1,5 @@
 body {
   font-family: monaco;
-  font-weight: bold;
   font-size: 15px;
 }
 
@@ -36,9 +35,6 @@ ul.node-body {
   height: 100%;
 }
 
-.jq-output-container {
-}
-
 .jq-indicator {
   color: gray;
 }
@@ -62,6 +58,7 @@ ul.node-body {
 }
 
 .jq-input {
+  outline: none;
   width: 50%;
   left: 10px;
   height: 20px;
@@ -70,6 +67,7 @@ ul.node-body {
 
 .data-input {
   position: absolute;
+  outline: none;
   height: 50%;
   width: 97%;
   top: 0px;
