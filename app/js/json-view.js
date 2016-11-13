@@ -1,6 +1,6 @@
 'use strict'
 
-const prettyJSON = require('./pretty-json')
+const prettyJSON = require('./pretty-json-2')
 const uuid = require('node-uuid')
 const $ = require('jquery')
 

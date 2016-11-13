@@ -48,6 +48,7 @@ ul.node-body {
 
 .bottom-bar {
   position: fixed;
+  display: none;
   bottom: 0px;
   width: 100%;
   left: 10px;

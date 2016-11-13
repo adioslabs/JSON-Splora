@@ -2,7 +2,6 @@
 
 // Dependencies
 const electron = require('electron')
-const config = require('./config')
 const app = electron.app
 
 require('electron-context-menu')({
