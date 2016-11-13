@@ -86,7 +86,6 @@ const NodeView = Backbone.View.extend({
     };
   },
   render: function() {
-    console.log(this.uuid)
     this.tpl = _.template(getNodeHTML(this.uuid));
     $(this.el).html(this.tpl);
     this.elements();
