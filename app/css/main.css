@@ -68,8 +68,8 @@ ul.node-body {
 .data-input {
   position: absolute;
   outline: none;
-  height: 50%;
-  width: 97%;
+  height: 600px;
+  width: 600px;
   top: 0px;
 }
 

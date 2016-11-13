@@ -14,6 +14,9 @@ require('electron-context-menu')({
 // Create window
 const BrowserWindow = electron.BrowserWindow
 
+const WINDOW_HEIGHT = 600
+const WINDOW_WIDTH = 600
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -22,8 +25,8 @@ function createWindow() {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: config.windowWidth,
-    height: config.windowHeight
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT
   })
 
   // and load the index.html of the app.
