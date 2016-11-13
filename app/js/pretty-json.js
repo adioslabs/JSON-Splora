@@ -120,7 +120,7 @@ const NodeView = Backbone.View.extend({
         this.trigger("mouseout", e);
       }, this);
       var li = $('<li/>');
-      var colom = '&nbsp;:&nbsp;';
+      var colom = ':';
       var left = $('<span />');
       var right = $('<span />').append(child.el);
       (this.type == 'array') ? left.html(''): left.html(key + colom);
