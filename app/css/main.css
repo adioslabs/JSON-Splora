@@ -9,25 +9,25 @@ ul.node-body {
 
 .app-container {
   position: absolute;
-  width: 10000px;
   height: 100%;
 }
 
 .output-containers {
   display: none;
-  min-width: 900px
+  min-width: 10000px;
 }
 
 .left {
-  float: left;
+  vertical-align: top;
   display: inline-block;
   overflow: hidden;
 }
 
 .right {
+  vertical-align: top;
   display: inline-block;
-  margin-left: 50px;
   overflow: hidden;
+  margin-left: 50px;
 }
 
 .json-output-container {

@@ -20,11 +20,11 @@ li {
 }
 
 .string {
-  color: #6AE368;
+  color: #66CD00;
 }
 
 .number {
-  color: #66ccff;
+  color: #0EBFE9;
 }
 
 .null {
@@ -32,7 +32,7 @@ li {
 }
 
 .boolean {
-  color: #ff33cc;
+  color: #BF3EFF;
 }
 
 .node-bracket:hover {

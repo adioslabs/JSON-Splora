@@ -7,19 +7,19 @@ const jq = require('node-jq')
 const fs = require('fs')
 const $ = require('jquery')
 
-// const json = `{
-//   "name": "test data",
-//   "date": "Sun Nov 06 2016 09:55:06 GMT-0500 (EST)",
-//   "other": [false, null, true],
-//   "people": [{
-//     "name": "Wells",
-//     "age": 26,
-//     "activities": [null, 5, true, false]
-//   }, {
-//     "name": "Danielle",
-//     "age": 24
-//   }]
-// }`
+const json = `{
+  "name": "test data",
+  "date": "Sun Nov 06 2016 09:55:06 GMT-0500 (EST)",
+  "other": [false, null, true],
+  "people": [{
+    "name": "Wells",
+    "age": 26,
+    "activities": [null, 5, true, false]
+  }, {
+    "name": "Danielle",
+    "age": 24
+  }]
+}`
 
 class App {
 
@@ -77,7 +77,7 @@ class App {
       });
     })
 
-    // this.jsonInput(json)
+    this.jsonInput(json)
   }
 
   /**
