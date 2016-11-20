@@ -3,37 +3,27 @@
 
 <head>
   <meta charset="UTF-8">
+  <script src="node_modules/codemirror/lib/codemirror.js" type="text/javascript"></script>
+  <script src="node_modules/jsonlint/lib/jsonlint.js" type="text/javascript"></script>
+  <script src="node_modules/codemirror/addon/lint/lint.js" type="text/javascript"></script>
+  <script src="node_modules/codemirror/addon/lint/json-lint.js" type="text/javascript"></script>
+  <script src="node_modules/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css" type="text/css">
+  <link rel="stylesheet" href="node_modules/codemirror/addon/lint/lint.css" type="text/css">
   <link rel="stylesheet" href="app/css/main.css" type="text/css">
-  <link rel="stylesheet" href="app/css/json.css" type="text/css">
   <title>Data Explorer</title>
 </head>
 
 <body>
-  <div class="app-container">
 
-    <!-- json / output -->
-    <div class="output-containers">
-      <div class="left">
-        <div class="json-output-container"></div>
-      </div>
-      <div class="right">
-        <div class="jq-output-container"></div>
-      </div>
-    </div>
-
-    <!-- json input -->
-    <textarea class="data-input"></textarea>
-
-    <!-- footer / input -->
-    <div class="bottom-bar">
-      <span class="jq-indicator">jq</span>
-      <input class="jq-input">
-      <div class="message-window"></div>
-    </div>
-
+  <!-- json input -->
+  <div class="editor-wrapper">
+    <textarea class="codemirror"></textarea>
   </div>
+
   <script>
-    require('./app/js/main');
+    const App = require('./app/js/app')
+    new App()
   </script>
 </body>
 
