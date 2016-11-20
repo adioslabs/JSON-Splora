@@ -1,5 +1,9 @@
 'use strict'
 
+/**
+ * Dependencies
+ */
+
 const Page = require('./Page')
 
 /**
@@ -9,6 +13,7 @@ const Page = require('./Page')
  */
 
 class App {
+
   constructor(document) {
     this.pages = [new Page()]
   }
