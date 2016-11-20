@@ -21,6 +21,8 @@ const vm = require('vm')
 class Editor {
 
   constructor() {
+    this.messageBox = document.querySelector('.message')
+
     this.lastFormatted = 0
     this.lastChanged = 0
     let textArea = document.querySelector('.codemirror')
@@ -73,13 +75,13 @@ class Editor {
   parse(input) {
     try {
       this.data = json5.parse(input)
-      console.log('valid')
+      this.message('valid json')
       let time = now()
       if (time - this.lastFormatted > 1 && time - this.lastChanged > 1) {
         this.format()
       }
     } catch (e) {
-      console.log('invalid')
+      this.message('invalid')
     }
   }
 
@@ -111,6 +113,10 @@ class Editor {
     //     this.jqIndicator.text('js').css('color', 'gray')
     //   });
     // }
+  }
+
+  message(message) {
+    this.messageBox.innerHTML = message
   }
 }
 

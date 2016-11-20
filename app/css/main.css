@@ -21,20 +21,25 @@ body {
   position: relative;
   height: 34px;
   left: 53px;
-  width: 61%;
+  width: 100%;
+}
+
+.jq-input:focus {
+  outline-width: 0;
 }
 
 .message-container {
+  padding-left: 30px;
   background: rgba(145, 255, 0, 0.19);
-  position: absolute;
-  height: 35px;
-  bottom: 2px;
-  width: 200px;
-  right: 3px;
+  position: relative;
+  height: 40px;
+  bottom: 40px;
+  right: 0px;
+  float: right;
 }
 
 .message {
-  position: absolute;
-  bottom: 7px;
-  right: 10px;
+  position: relative;
+  right: 15px;
+  top: 11px;
 }
