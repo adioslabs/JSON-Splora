@@ -8,7 +8,7 @@
  * Dependencies
  */
 
-const format = require('js-beautify').js_beautify
+const formatJSON = require('js-beautify').js_beautify
 const json5 = require('json5')
 const jq = require('node-jq')
 const vm = require('vm')
@@ -22,22 +22,39 @@ class Editor {
 
   constructor() {
     this.messageBox = document.querySelector('.message')
-
     this.lastFormatted = 0
     this.lastChanged = 0
-    let textArea = document.querySelector('.codemirror')
-      // CodeMirror is exposed in /index.html
-    this.editor = CodeMirror.fromTextArea(textArea, {
+
+    // CodeMirror is exposed in /index.html
+    this.editor = CodeMirror.fromTextArea(document.querySelector('.json-input'), {
       gutters: ["CodeMirror-lint-markers"],
       lineNumbers: true,
       smartIndent: true,
       autofocus: true,
-      mode: 'application/json',
+      extraKeys: {
+        Tab: false
+      },
+      mode: 'application/javascript',
+      lint: true
+    })
+
+    // CodeMirror readonly filter output
+    this.output = CodeMirror.fromTextArea(document.querySelector('.filter-output'), {
+      lineNumbers: true,
+      smartIndent: true,
+      readOnly: true,
+      mode: 'application/javascript',
       lint: true
     })
 
     // this.editor.setOption("lint", true)
     this.editor.on('change', e => this.onChange(e))
+
+    // Pass the jq filter on to the parse function
+    $('.jq-input').on('keyup', e => {
+      let filter = $(e.target).val()
+      this.parseInput(filter)
+    })
   }
 
   /**
@@ -48,7 +65,7 @@ class Editor {
 
   onChange(e) {
     let input = this.editor.getValue()
-    this.parse(input)
+    this.parseJSON(input)
     this.lastChanged = now()
   }
 
@@ -56,15 +73,16 @@ class Editor {
    * Forats the code in the editor
    */
 
-  format() {
+  formatInput() {
     console.log('formatting')
     let input = this.editor.getValue()
-    let json = format(input, {
+    let json = formatJSON(input, {
       indent_size: 2
     })
     this.editor.setValue(json)
     this.lastFormatted = now()
   }
+
 
   /**
    * Handle input
@@ -72,13 +90,13 @@ class Editor {
    * @param {String} input
    */
 
-  parse(input) {
+  parseJSON(input) {
     try {
       this.data = json5.parse(input)
       this.message('valid json')
       let time = now()
       if (time - this.lastFormatted > 1 && time - this.lastChanged > 1) {
-        this.format()
+        this.formatInput()
       }
     } catch (e) {
       this.message('invalid')
@@ -92,28 +110,46 @@ class Editor {
    */
 
   parseInput(filter) {
-    // let sandbox = {
-    //   x: this.data,
-    //   result: null
-    // }
-    // let code = `result = x${filter}`
-    // try {
-    //   new vm.Script(code).runInNewContext(sandbox)
-    //   this.jqView = new JSONView(sandbox.result, this.jqOutput)
-    //   this.jqIndicator.css('color', 'green')
-    // } catch (e) {
-    //   this.jqIndicator.css('color', 'gray')
-    //   jq.run(filter, this.data, {
-    //     input: 'json',
-    //     output: 'json'
-    //   }).then(output => {
-    //     this.jqView = new JSONView(output, this.jqOutput)
-    //     this.jqIndicator.text('jq').css('color', 'green')
-    //   }).catch(e => {
-    //     this.jqIndicator.text('js').css('color', 'gray')
-    //   });
-    // }
+    console.log('parse input', filter)
+    let sandbox = {
+      x: this.data,
+      result: null
+    }
+    let code = `result = x${filter}`
+
+    // Try to run through JavaScript vm
+    try {
+      new vm.Script(code).runInNewContext(sandbox)
+      this.showOutput(sandbox.result)
+    } catch (e) {
+
+      console.log('javascript vm failed')
+
+      // try jq filter
+      jq.run(filter, this.data, {
+        input: 'json',
+        output: 'json'
+      }).then(result => {
+        this.showOutput(result)
+      }).catch(e => {
+        console.log('error', e.stack || e)
+      });
+    }
   }
+
+  showOutput(value) {
+    console.log('output', value)
+    let input = JSON.stringify(value)
+    let output = formatJSON(input, {
+      keep_array_indentation: false,
+      indent_size: 2
+    })
+    this.output.setValue(output)
+  }
+
+  /**
+   * Write a message to the application message bar
+   */
 
   message(message) {
     this.messageBox.innerHTML = message

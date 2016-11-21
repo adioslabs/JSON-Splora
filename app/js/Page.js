@@ -10,8 +10,13 @@ class Page {
 
   constructor() {
     this.editor = new Editor()
+    $('.panel-left').resizable({
+      handleSelector: '.splitter',
+      resizeHeight: false
+    })
   }
 }
+
 
 /**
  * Exports
