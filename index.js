@@ -14,7 +14,8 @@ require('electron-context-menu')({
 const BrowserWindow = electron.BrowserWindow
 
 const WINDOW_HEIGHT = 600
-const WINDOW_WIDTH = 600
+const WINDOW_WIDTH = 1000
+const env = 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,7 +33,9 @@ function createWindow() {
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  if (env == 'dev') {
+    mainWindow.webContents.openDevTools()
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {

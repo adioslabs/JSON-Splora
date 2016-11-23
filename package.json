@@ -24,7 +24,6 @@
     "js-beautify": "^1.6.4",
     "json5": "^0.5.0",
     "jsonlint": "^1.6.2",
-    "node-jq": "^0.3.13",
-    "node-uuid": "^1.4.7"
+    "node-jq": "^0.3.13"
   }
 }
