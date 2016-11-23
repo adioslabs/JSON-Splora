@@ -13,6 +13,13 @@ const json5 = require('json5')
 const jq = require('node-jq')
 const vm = require('vm')
 
+let welcomeMessage = `/**
+ * Welcome to JSON-Splora!
+ *
+ * Drag-and-drop a file, or input raw JSON or JS
+ */
+
+`
 
 /**
  * Wrapper class for json editor
@@ -34,8 +41,15 @@ class Editor {
       extraKeys: {
         Tab: false
       },
+      indentUnit: 2,
+      tabSize: 2,
       mode: 'application/javascript',
       lint: true
+    })
+
+    this.editor.setValue(welcomeMessage)
+    this.editor.setCursor({
+      line: 7
     })
 
     // CodeMirror readonly filter output
@@ -49,11 +63,16 @@ class Editor {
 
     // this.editor.setOption("lint", true)
     this.editor.on('change', e => this.onChange(e))
+    this.editor.on('inputRead', (cm, e) => {
+      if (e.origin == 'paste') {
+        this.formatInput(e.text[0])
+      }
+    })
 
     // Pass the jq filter on to the parse function
-    $('.jq-input').on('keyup', e => {
+    $('.filter-input').on('keyup', e => {
       let filter = $(e.target).val()
-      this.parseInput(filter)
+      this.runFilter(filter)
     })
   }
 
@@ -74,7 +93,6 @@ class Editor {
    */
 
   formatInput() {
-    console.log('formatting')
     let input = this.editor.getValue()
     let json = formatJSON(input, {
       indent_size: 2
@@ -93,13 +111,14 @@ class Editor {
   parseJSON(input) {
     try {
       this.data = json5.parse(input)
-      this.message('valid json')
-      let time = now()
-      if (time - this.lastFormatted > 1 && time - this.lastChanged > 1) {
-        this.formatInput()
-      }
+      this.showBottomBar()
+
+      // let time = now()
+      // if (time - this.lastFormatted > 1 && time - this.lastChanged > 1) {
+      //   this.formatInput()
+      // }
     } catch (e) {
-      this.message('invalid')
+      this.hideBottomBar()
     }
   }
 
@@ -109,8 +128,11 @@ class Editor {
    * @param {String} filter
    */
 
-  parseInput(filter) {
-    console.log('parse input', filter)
+  runFilter(filter) {
+    if (!filter.length) {
+      this.hideRightPanel()
+      return
+    }
     let sandbox = {
       x: this.data,
       result: null
@@ -123,8 +145,6 @@ class Editor {
       this.showOutput(sandbox.result)
     } catch (e) {
 
-      console.log('javascript vm failed')
-
       // try jq filter
       jq.run(filter, this.data, {
         input: 'json',
@@ -132,19 +152,50 @@ class Editor {
       }).then(result => {
         this.showOutput(result)
       }).catch(e => {
-        console.log('error', e.stack || e)
+        this.hideRightPanel()
       });
     }
   }
 
+  /**
+   * Show the read-only filter output
+   */
+
   showOutput(value) {
-    console.log('output', value)
     let input = JSON.stringify(value)
     let output = formatJSON(input, {
       keep_array_indentation: false,
       indent_size: 2
     })
     this.output.setValue(output)
+    this.showRightPanel()
+  }
+
+  /**
+   * Shows the bottom bar
+   */
+
+  showBottomBar() {
+    if ($('.bottom-wrapper').hasClass('hidden')) {
+      $('.bottom-wrapper').removeClass('hidden')
+      $('.filter-input').focus()
+    }
+  }
+
+  /**
+   * Hides the bottom bar
+   */
+
+  hideBottomBar() {
+    $('.bottom-wrapper').addClass('hidden')
+  }
+
+  showRightPanel() {
+    $('.panel-left').css('width', '50%')
+  }
+
+  hideRightPanel() {
+    $('.panel-left').css('width', '100%')
   }
 
   /**
@@ -152,7 +203,7 @@ class Editor {
    */
 
   message(message) {
-    this.messageBox.innerHTML = message
+    // this.messageBox.innerHTML = message
   }
 }
 

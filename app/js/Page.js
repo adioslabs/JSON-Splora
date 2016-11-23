@@ -12,7 +12,7 @@ class Page {
     this.editor = new Editor()
     $('.panel-left').resizable({
       handleSelector: '.splitter',
-      resizeHeight: false
+      handles: 'e, w'
     })
   }
 }

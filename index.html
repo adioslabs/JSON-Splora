@@ -33,22 +33,18 @@
   <!-- json input -->
   <div class="editor-wrapper">
     <div class="panel-left">
-      <textarea class="json-input"></textarea>
+      <textarea class="json-input" tabindex="1"></textarea>
     </div>
     <div class="splitter">
     </div>
     <div class="panel-right">
-      <textarea class="filter-output"></textarea>
+      <textarea class="filter-output" tabindex="-1"></textarea>
     </div>
   </div>
 
-  <div class="bottom-wrapper">
-    <input class="jq-input">
-    <div class="message-container">
-      <div class="message">
-        empty input
-      </div>
-    </div>
+  <div class="bottom-wrapper hidden">
+    <img src="app/assets/shuffle.svg" class="filter-icon">
+    <input class="filter-input" tabindex="2">
   </div>
 
   <script>

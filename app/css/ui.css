@@ -1,47 +1,39 @@
-
 /* CODEMIRROR */
 
 .CodeMirror {
   height: calc(100vh);
 }
 
+
 /* BOTTOM BAR */
 
 .bottom-wrapper {
   border-top: 1px solid lightgray;
-  background: white;
-  z-index: 1000;
+  background: rgba(145, 255, 0, 0.19);
   position: fixed;
+  z-index: 1000;
   bottom: 0px;
   height: 40px;
   width: 100%;
   left: 0px;
 }
 
-.jq-input {
+.filter-input {
   font-family: monaco;
   font-size: 20px;
   position: relative;
   height: 34px;
   width: 100%;
+  left: 46px;
 }
 
-.jq-input:focus {
+.filter-input:focus {
   outline-width: 0;
 }
 
-.message-container {
-  padding-left: 30px;
-  background: rgba(145, 255, 0, 0.19);
-  position: relative;
-  height: 40px;
-  bottom: 40px;
-  right: 0px;
-  float: right;
-}
-
-.message {
-  position: relative;
-  right: 15px;
-  top: 11px;
+.filter-icon {
+  position: absolute;
+  height: 20px;
+  left: 14px;
+  top: 10px;
 }
