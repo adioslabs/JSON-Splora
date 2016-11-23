@@ -1,5 +1,5 @@
 {
-  "name": "electron-quick-start",
+  "name": "JSON-Splora",
   "version": "1.0.0",
   "description": "Data exploration and sharing",
   "main": "index.js",
@@ -15,7 +15,8 @@
   ],
   "author": "Wells Johnston",
   "devDependencies": {
-    "electron": "^1.4.1"
+    "electron": "^1.4.1",
+    "electron-packager": "^8.3.0"
   },
   "dependencies": {
     "codemirror": "^5.20.2",
