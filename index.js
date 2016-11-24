@@ -2,20 +2,17 @@
 
 // Dependencies
 const electron = require('electron')
+const Menu = require('menu')
 const app = electron.app
-
-require('electron-context-menu')({
-  prepend: params => [{
-    label: 'Rainbow'
-  }]
-})
 
 // Create window
 const BrowserWindow = electron.BrowserWindow
 
 const WINDOW_HEIGHT = 600
 const WINDOW_WIDTH = 1000
-const env = 'production'
+
+// Environment
+const env = process.env.ENV || 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

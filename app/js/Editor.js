@@ -95,6 +95,7 @@ class Editor {
   formatInput() {
     let input = this.editor.getValue()
     let json = formatJSON(input, {
+      keep_array_indentation: true,
       indent_size: 2
     })
     this.editor.setValue(json)
@@ -129,6 +130,7 @@ class Editor {
    */
 
   runFilter(filter) {
+    console.log('running filter', filter)
     if (!filter.length) {
       this.hideRightPanel()
       return
@@ -145,15 +147,22 @@ class Editor {
       this.showOutput(sandbox.result)
     } catch (e) {
 
-      // try jq filter
-      jq.run(filter, this.data, {
-        input: 'json',
-        output: 'json'
-      }).then(result => {
-        this.showOutput(result)
-      }).catch(e => {
+      try {
+
+        // try jq filter
+        jq.run(filter, this.data, {
+          input: 'json',
+          output: 'json'
+        }).then(result => {
+          this.showOutput(result)
+        }).catch(e => {
+          console.log(e.stack || e)
+          this.hideRightPanel()
+        });
+      } catch (e) {
+        console.log(e.stack || e)
         this.hideRightPanel()
-      });
+      }
     }
   }
 
@@ -162,13 +171,10 @@ class Editor {
    */
 
   showOutput(value) {
-    let input = JSON.stringify(value)
-    let output = formatJSON(input, {
-      keep_array_indentation: false,
-      indent_size: 2
-    })
+    let output = JSON.stringify(value, null, 2)
     this.output.setValue(output)
     this.showRightPanel()
+    console.log('showing output', value)
   }
 
   /**
