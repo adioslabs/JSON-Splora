@@ -1,13 +1,18 @@
 'use strict'
 
 // Dependencies
+const enableContextMenu = require('electron-context-menu')
+const menuTemplate = require('./app/system/menu')
+const defaultMenu = require('electron-default-menu')
 const electron = require('electron')
-const Menu = require('menu')
+const path = require('path')
+
+const shell = electron.shell
+const Menu = electron.Menu
 const app = electron.app
 
 // Create window
 const BrowserWindow = electron.BrowserWindow
-
 const WINDOW_HEIGHT = 600
 const WINDOW_WIDTH = 1000
 
@@ -20,17 +25,19 @@ let mainWindow
 
 function createWindow() {
 
-  // Create the browser window.
   mainWindow = new BrowserWindow({
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT
   })
 
-  // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
+  const menu = Menu.buildFromTemplate(menuTemplate)
+  Menu.setApplicationMenu(menu)
+  enableContextMenu()
+
   // Open the DevTools.
-  if (env == 'dev') {
+  if (env === 'dev') {
     mainWindow.webContents.openDevTools()
   }
 

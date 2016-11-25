@@ -13,10 +13,14 @@ const json5 = require('json5')
 const jq = require('node-jq')
 const vm = require('vm')
 
-let welcomeMessage = `/**
+let welcomeMessage =
+`/**
  * Welcome to JSON-Splora!
  *
  * Drag-and-drop a file, or input raw JSON or JS
+ *
+ * When valid JSON is detected, you a window will open
+ * below where you can run functions and jq filters
  */
 
 `
@@ -30,7 +34,6 @@ class Editor {
   constructor() {
     this.messageBox = document.querySelector('.message')
     this.lastFormatted = 0
-    this.lastChanged = 0
 
     // CodeMirror is exposed in /index.html
     this.editor = CodeMirror.fromTextArea(document.querySelector('.json-input'), {
@@ -49,7 +52,7 @@ class Editor {
 
     this.editor.setValue(welcomeMessage)
     this.editor.setCursor({
-      line: 7
+      line: 10
     })
 
     // CodeMirror readonly filter output
@@ -61,11 +64,14 @@ class Editor {
       lint: true
     })
 
-    // this.editor.setOption("lint", true)
-    this.editor.on('change', e => this.onChange(e))
+    this.editor.on('change', _ => this.update())
+
+    // Trigger a change event for pasting data, with 'format' set to true
     this.editor.on('inputRead', (cm, e) => {
       if (e.origin == 'paste') {
-        this.formatInput(e.text[0])
+        this.update({
+          format: true
+        })
       }
     })
 
@@ -79,13 +85,19 @@ class Editor {
   /**
    * Fires when a change is registered in the editor
    *
-   * @param {Object} e The editor change object
+   * @param {Objects} opts
    */
 
-  onChange(e) {
+  update(opts) {
+    opts = opts || {}
     let input = this.editor.getValue()
-    this.parseJSON(input)
-    this.lastChanged = now()
+    try {
+      this.data = json5.parse(input)
+      if (opts.format) this.formatInput()
+      this.showBottomBar()
+    } catch (e) {
+      this.hideBottomBar()
+    }
   }
 
   /**
@@ -100,27 +112,6 @@ class Editor {
     })
     this.editor.setValue(json)
     this.lastFormatted = now()
-  }
-
-
-  /**
-   * Handle input
-   *
-   * @param {String} input
-   */
-
-  parseJSON(input) {
-    try {
-      this.data = json5.parse(input)
-      this.showBottomBar()
-
-      // let time = now()
-      // if (time - this.lastFormatted > 1 && time - this.lastChanged > 1) {
-      //   this.formatInput()
-      // }
-    } catch (e) {
-      this.hideBottomBar()
-    }
   }
 
   /**
@@ -146,7 +137,6 @@ class Editor {
       new vm.Script(code).runInNewContext(sandbox)
       this.showOutput(sandbox.result)
     } catch (e) {
-
       try {
 
         // try jq filter

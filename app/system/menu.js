@@ -1,7 +1,10 @@
+/**
+ *
+ */
+
 'use strict'
 
-const electron = require('electron')
-const Menu = electron.Menu
+const app = require('electron').app
 
 const template = [{
   label: 'Edit',
@@ -17,10 +20,6 @@ const template = [{
     role: 'copy'
   }, {
     role: 'paste'
-  }, {
-    role: 'pasteandmatchstyle'
-  }, {
-    role: 'delete'
   }, {
     role: 'selectall'
   }]
@@ -62,7 +61,7 @@ const template = [{
 
 if (process.platform === 'darwin') {
   template.unshift({
-      label: 'JSON Splora',
+      label: app.getName(),
       submenu: [{
         role: 'about'
       }, {
@@ -115,5 +114,4 @@ if (process.platform === 'darwin') {
   }]
 }
 
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+module.exports = template
